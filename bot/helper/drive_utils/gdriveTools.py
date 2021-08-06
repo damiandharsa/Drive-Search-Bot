@@ -69,7 +69,7 @@ class GoogleDriveHelper:
                                                spaces='drive',
                                                pageSize=200,
                                                fields='files(id, name, mimeType, size)',
-                                               orderBy='modifiedTime desc').execute()["files"]
+                                               orderBy='folder, name asc').execute()["files"]
         return response
 
     def edit_telegraph(self):
@@ -87,7 +87,7 @@ class GoogleDriveHelper:
                     content += f'<b> | <a href="https://telegra.ph/{self.path[nxt_page]}">Next</a></b>'
                     nxt_page += 1
             telegra_ph.edit_page(path = self.path[prev_page],
-                                 title = 'LoaderX',
+                                 title = 'G-Drive Search Bot',
                                  html_content=content)
         return
 
@@ -101,7 +101,7 @@ class GoogleDriveHelper:
             INDEX += 1          
             if response:
                 if add_title_msg == True:
-                    msg = f'<h3>Search Results for : {fileName}</h3><br>@LoaderXbot #ProjektX<br><br>'
+                    msg = f'<h3>Search Results for: {fileName}</h3>'
                     add_title_msg = False
                 msg += f"╾────────────╼<br><b>{DRIVE_NAME[INDEX]}</b><br>╾────────────╼<br>"
                 for file in response:
@@ -133,15 +133,15 @@ class GoogleDriveHelper:
             return "No Result Found :(", None
 
         for content in self.telegraph_content :
-            self.path.append(telegra_ph.create_page(title = 'LoaderX',
+            self.path.append(telegra_ph.create_page(title = 'G-Drive Search Bot',
                                                 html_content=content )['path'])
 
         self.num_of_path = len(self.path)      
         if self.num_of_path > 1:
             self.edit_telegraph()
 
-        msg = f" Search Results For {fileName} 👇 "
+        msg = f" Search Results for {fileName}: "
         buttons = button_builder.ButtonMaker()   
-        buttons.buildbutton("CLICK HERE", f"https://telegra.ph/{self.path[0]}")
+        buttons.buildbutton("View Results", f"https://telegra.ph/{self.path[0]}")
 
         return msg, InlineKeyboardMarkup(buttons.build_menu(1))
