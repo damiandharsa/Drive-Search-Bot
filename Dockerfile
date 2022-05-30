@@ -1,4 +1,4 @@
-FROM ghcr.io/devilld/py3-dev:main
+FROM ghcr.io/devilld/py-dev
 
 WORKDIR /BOT
 
@@ -8,3 +8,5 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+CMD ["bash","start.sh"]
